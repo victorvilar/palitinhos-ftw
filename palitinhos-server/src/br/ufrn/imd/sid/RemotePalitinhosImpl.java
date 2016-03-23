@@ -5,7 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemotePalitinhos {
 
@@ -13,7 +12,7 @@ public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemoteP
 	private int rodada;
 	private int somaPalitinhos;
 	private int chutePalitinos;
-	private List<String> jogadores;
+	private ArrayList<String> jogadores;
 
 	protected RemotePalitinhosImpl() throws RemoteException {
 		this.quantPalitinhos = 3;
