@@ -3,7 +3,7 @@ package br.ufrn.imd.sid.model;
 public class Jogador {
 
 	private String nome;
-	private int id;
+	private String nick;
 	private String opcao;
 	private int totalPalitos;
 	private int chute;
@@ -11,6 +11,10 @@ public class Jogador {
 	
 	public Jogador(String nome){
 		this.nome = nome;
+	}
+	
+	public Jogador(){
+		
 	}
 	
 	public String getNome() {
@@ -21,12 +25,12 @@ public class Jogador {
 		this.nome = nome;
 	}
 	
-	public int getId() {
-		return id;
+	public String getNick() {
+		return nick;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 	
 	public int getTotalPalitos() {

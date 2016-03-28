@@ -4,20 +4,24 @@ import java.rmi.Naming;
 import java.rmi.RMISecurityManager;
 import java.util.Scanner;
 
+import br.ufrn.imd.sid.model.Jogador;
+
 public class PalitinhosClient {
+	
+	
+	private static Jogador jogador;
+	private static String menu = new String("Digite a opção desejada: \n"
+											+ "1 - Inscrever-se	em uma mesa \n"
+											+ "2 - Iniciar jogo \n"
+											+ "\"qualquer valor\" - Seu lance");
+	
 	public static void main(String[] args) {
 		Scanner ler = new Scanner(System.in);
-		int palitinhos;
-		String matricula;
-		
+		jogador = new Jogador();
+		dadosJogador(ler);
 		try {
 			System.setSecurityManager(new RMISecurityManager());
 			RemotePalitinhos jogoPalitinhos = (RemotePalitinhos)Naming.lookup("rmi://localhost/palitinhos");
-			System.out.println("Digite sua matricula: ");
-			matricula = ler.nextLine();
-			
-			//Envia matricula pro servidor
-			jogoPalitinhos.addJogadores(matricula);
 			
 			while(true){
 				System.out.println("Escolha a quantidade de palitinhos: ");
@@ -32,5 +36,13 @@ public class PalitinhosClient {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public static void dadosJogador(Scanner e){
+		System.out.println("Digite seu nome: ");
+		jogador.setNome(new String(e.nextLine()));
+		
+		System.out.println("Digite seu nickName: ");
+		jogador.setNick(new String(e.nextLine()));
 	}
 }
