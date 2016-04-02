@@ -8,6 +8,21 @@ public class Jogo {
 	private int rodada;
 	private int totalPalitosRodada;
 	
+	/* Estados validos	ESPERANDO_JOGADORES, 
+	 * 					ESPERANDO_LANCES, 
+	 * 					FIM_RODADA,
+	 * 					FIM_JOGO
+	 * */
+	private String estado; 
+	
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 	public Jogo(){
 		jogadores = new ArrayList<Jogador>();
 		this.rodada = 0;

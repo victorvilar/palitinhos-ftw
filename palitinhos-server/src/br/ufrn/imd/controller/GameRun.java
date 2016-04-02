@@ -27,8 +27,6 @@ public class GameRun {
 		jogo.setRodada(jogo.getRodada() + 1);
 	}
 	
-
-	
 	public Jogador acharJogador(String nome, String nick){
 		for(Jogador j: jogo.getJogadores()){
 			if(j.getNome().equals(nome) && j.getNick().equals(nick)){
@@ -88,5 +86,58 @@ public class GameRun {
 			}
 		}
 		return jogs;
+	}
+	
+	public void setEstado(){
+		/* Estados validos	ESPERANDO_JOGADORES, 
+		 * 					ESPERANDO_LANCES, 
+		 * 					FIM_RODADA,
+		 * 					FIM_JOGO
+		 * */		
+		if((jogo.getJogadores().size() < 2) || !todosProntos()){
+			jogo.setEstado("ESPERANDO_JOGADORES");
+		}
+		else if(todosProntos()){
+			if(todosComMaoeLance()){
+				if(quemVenceu() != null){
+					jogo.setEstado("FIM_JOGO");
+				}
+				jogo.setEstado("FIM_RODADA");
+			}
+			else{
+				jogo.setEstado("ESPERANDO_LANCES");
+			}
+		}
+	}
+	
+	public String getEstado(){
+		return jogo.getEstado();
+	}
+	
+	public boolean todosProntos(){
+		for(Jogador j: jogo.getJogadores()){
+			if(j.getOpcao() == -1){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean todosComMaoeLance(){
+		for(Jogador j: jogo.getJogadores()){
+			if(j.getChute() == -1 || j.getPalitosMao() == -1){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public Jogador quemVenceu(){
+		for(Jogador j: jogo.getJogadores()){
+			if(j.getTotalPalitos() == 0){
+				return j;
+			}
+		}
+		return null;
 	}
 }

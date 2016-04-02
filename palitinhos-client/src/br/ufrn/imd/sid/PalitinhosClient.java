@@ -10,6 +10,11 @@ public class PalitinhosClient {
 	
 	
 	private static Jogador jogador;
+	private static String avisoInicial = new String("O jogo considera qualquer numero diferente\n"
+													+"de 0 ou 1 como um lance(chute). Por isso \n"
+													+ "caso seja digitado qualquer numero no inicio\n"
+													+ "ele sera considerado como seu primeiro lance\n"
+													+ "e a inscrição e início serão ");
 	private static String menu = new String("Digite a opção desejada: \n"
 											+ "1 - Inscrever-se	em uma mesa \n"
 											+ "2 - Iniciar jogo \n"

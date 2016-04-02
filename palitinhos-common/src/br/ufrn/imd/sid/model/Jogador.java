@@ -4,17 +4,25 @@ public class Jogador {
 
 	private String nome;
 	private String nick;
-	private String opcao;
+	private int opcao;
 	private int totalPalitos;
 	private int chute;
 	private int palitosMao;
 	
-	public Jogador(String nome){
+	public Jogador(String nome, String nick){
 		this.nome = nome;
+		this.nick = nick;
+		this.opcao = -1;
+		this.chute = -1;
+		this.totalPalitos = 3;
+		this.palitosMao = -1;
 	}
 	
 	public Jogador(){
-		
+		this.opcao = -1;
+		this.chute = -1;
+		this.totalPalitos = 3;
+		this.palitosMao = -1;
 	}
 	
 	public String getNome() {
@@ -57,11 +65,11 @@ public class Jogador {
 		this.palitosMao = palitosMao;
 	}
 
-	public String getOpcao() {
+	public int getOpcao() {
 		return opcao;
 	}
 
-	public void setOpcao(String opcao) {
+	public void setOpcao(int opcao) {
 		this.opcao = opcao;
 	}
 	
