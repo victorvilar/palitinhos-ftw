@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Jogo {
 	
 	private ArrayList<Jogador> jogadores;
+	private ArrayList<Jogador> jogadoresDesistentes;
 	private int rodada;
 	private int totalPalitosRodada;
 	
@@ -27,6 +28,7 @@ public class Jogo {
 		jogadores = new ArrayList<Jogador>();
 		this.rodada = 0;
 		this.totalPalitosRodada = -1;
+		this.estado = "ESPERANDO_JOGADORES";
 	}
 	
 	public ArrayList<Jogador> getJogadores() {
@@ -52,6 +54,13 @@ public class Jogo {
 	public void setTotalPalitosRodada(int totalPalitosRodada) {
 		this.totalPalitosRodada = totalPalitosRodada;
 	}
-	
+
+	public ArrayList<Jogador> getJogadoresDesistentes() {
+		return jogadoresDesistentes;
+	}
+
+	public void setJogadoresDesistentes(ArrayList<Jogador> jogadoresDesistentes) {
+		this.jogadoresDesistentes = jogadoresDesistentes;
+	}
 	
 }

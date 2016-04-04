@@ -21,6 +21,7 @@ public class GameRun {
 	
 	public void removeJogador(Jogador j){
 		jogo.getJogadores().remove(j);
+		jogo.getJogadoresDesistentes().add(j);
 	}
 	
 	public void addRodada(){
@@ -36,21 +37,7 @@ public class GameRun {
 		return null;
 	}
 	
-	public int acharPosicaoJogadorLista(String nome, String nick){
-		for(Jogador j: jogo.getJogadores()){
-			if(j.getNome().equals(nome) && j.getNick().equals(nick)){
-				return jogo.getJogadores().indexOf(j);
-			}
-		}
-		return -1;
-	}
-	
-	public void receberChute(Jogador jogador){
-		int pos = acharPosicaoJogadorLista(jogador.getNome(), jogador.getNick());
-		jogo.getJogadores().get(pos).setChute(jogador.getChute());
-	}
-	
-	public ArrayList<Jogador> encontrarGanhadorRodada(){
+	public ArrayList<Jogador> procurarGanhadorRodada(){
 		ArrayList<Jogador> jogs = new ArrayList<Jogador>();
 		for(Jogador j: jogo.getJogadores()){
 			if(j.getChute() == jogo.getTotalPalitosRodada()){
@@ -64,6 +51,12 @@ public class GameRun {
 	public void resetarChutes(){
 		for(Jogador j: jogo.getJogadores()){
 			j.setChute(-1);	
+		}
+	}
+	
+	public void resetarMaos(){
+		for(Jogador j: jogo.getJogadores()){
+			j.setPalitosMao(-1);	
 		}
 	}
 	
@@ -139,5 +132,38 @@ public class GameRun {
 			}
 		}
 		return null;
+	}
+
+	
+	public Jogo getJogo() {
+		return jogo;
+	}
+
+	
+	public void setJogo(Jogo jogo) {
+		this.jogo = jogo;
+	}
+	
+	public String montarRespostaRodada(){
+		ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
+		jogadores = procurarGanhadorRodada();
+		String resposta = new String();
+		String vencedoresRodada = new String("Vencedores da rodada: \n");
+		resposta = "Rodada numero: " + jogo.getRodada() + "\n";
+		
+		for(Jogador j: jogadores){
+			vencedoresRodada = vencedoresRodada + "\t " + j.getNome() + " - " + j.getNick() + "\n"; 
+		}
+		resposta = resposta + vencedoresRodada;
+		
+		if(getEstado().equals("FIM_JOGO")){
+			String vencedoresJogo = new String("Vencedor(es) do jogo: \n");
+			for(Jogador j: procurarGanhadorJogo()){
+				vencedoresJogo = vencedoresJogo + "\t " + j.getNome() + " - " + j.getNick() + "\n"; 
+			}
+			resposta = resposta + vencedoresJogo;
+		}
+		
+		return resposta;
 	}
 }

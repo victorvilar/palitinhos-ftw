@@ -2,6 +2,12 @@ package br.ufrn.imd.sid.model;
 
 public class Jogador {
 
+	/*
+	 * Opcoes validas	0 - sair do jogo
+	 * 					1 - iniciar jogo
+	 * 					2 - dar lance
+	 */
+	
 	private String nome;
 	private String nick;
 	private int opcao;

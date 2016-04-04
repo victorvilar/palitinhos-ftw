@@ -3,19 +3,19 @@ package br.ufrn.imd.sid;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import br.ufrn.imd.sid.model.Jogador;
-
 public interface RemotePalitinhos extends Remote {
 
-	public String getEstado(Jogador jogador) throws RemoteException;
+	public String getEstado() throws RemoteException;
 
-	public void addJogador(Jogador jogador) throws RemoteException;
+	public void addJogador(String nome, String nick) throws RemoteException;
 	
-	public void iniciarJogo(Jogador jogador) throws RemoteException;
+	public String iniciarJogo(String nome, String nick, int opcao) throws RemoteException;
 	
-	public void darLance(Jogador jogador)  throws RemoteException;
+	public String darLance(String nome, String nick, int opcao, int mao, int chute)  throws RemoteException;
 	
 	public String receberResultadoRodada()  throws RemoteException;
 	
-	public void sairJogo()  throws RemoteException;
+	public void sairJogo(String nome, String nick)  throws RemoteException;
+	
+	public int quantosJogadores() throws RemoteException;
 }

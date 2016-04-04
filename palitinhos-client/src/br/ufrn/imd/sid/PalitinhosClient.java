@@ -1,7 +1,6 @@
 package br.ufrn.imd.sid;
 
 import java.rmi.Naming;
-import java.rmi.RMISecurityManager;
 import java.util.Scanner;
 
 import br.ufrn.imd.sid.model.Jogador;
@@ -10,33 +9,51 @@ public class PalitinhosClient {
 	
 	
 	private static Jogador jogador;
-	private static String avisoInicial = new String("O jogo considera qualquer numero diferente\n"
-													+"de 0 ou 1 como um lance(chute). Por isso \n"
-													+ "caso seja digitado qualquer numero no inicio\n"
-													+ "ele sera considerado como seu primeiro lance\n"
-													+ "e a inscrição e início serão ");
-	private static String menu = new String("Digite a opção desejada: \n"
-											+ "1 - Inscrever-se	em uma mesa \n"
-											+ "2 - Iniciar jogo \n"
-											+ "\"qualquer valor\" - Seu lance");
+
 	
+	/*
+	 * Opcoes validas	0 - sair do jogo
+	 * 					1 - iniciar jogo
+	 * 					2 - dar lance
+	 */
 	public static void main(String[] args) {
 		Scanner ler = new Scanner(System.in);
 		jogador = new Jogador();
 		dadosJogador(ler);
 		try {
-			System.setSecurityManager(new RMISecurityManager());
-			RemotePalitinhos jogoPalitinhos = (RemotePalitinhos)Naming.lookup("rmi://localhost/palitinhos");
 			
-			while(true){
-				System.out.println("Escolha a quantidade de palitinhos: ");
-				palitinhos = ler.nextInt();
-				jogoPalitinhos.quantPalitinhos(matricula, palitinhos);
-				
-				System.out.println("Qual seu chute para quantidade de palitinhos em jogo?");
-				palitinhos = ler.nextInt();
-								
-				//Se o cliente ganhar o servidor retorna informando e retira o participante do jogo
+			/**
+			 * parte de conexao com o servidor...
+			 */
+			RemotePalitinhos palitos = (RemotePalitinhos)Naming.lookup("rmi://localhost/palitinhos");
+			palitos.addJogador(jogador.getNome(), jogador.getNick());
+			
+			System.out.println("Digite 1 se estiver pronto e quiser iniciar o jogo.");
+			int controle = Integer.valueOf(ler.nextLine());
+			
+			while(controle != 0){
+				if(palitos.getEstado().equals("ESPERANDO_JOGADORES")){
+					Thread.sleep(5000);
+				}
+				else if(palitos.getEstado().equals("ESPERANDO LANCE") && controle == 1){
+					controle = 2;
+					System.out.println("Digite o numero de palitos para mao(entre 0 e 3): ");
+					jogador.setPalitosMao(Integer.valueOf(ler.nextLine()));
+					System.out.println("\t Jogadores ativos: " + palitos.quantosJogadores());
+					
+					System.out.println("Digite seu chute: ");
+					jogador.setChute(Integer.valueOf(ler.nextLine()));
+					
+					palitos.darLance(jogador.getNome(), jogador.getNick(), 2, jogador.getPalitosMao(), jogador.getChute());
+					
+					if(palitos.getEstado().equals("FIM_RODADA")){
+						controle = 1;
+					}
+					else if(palitos.getEstado().equals("FIM_JOGO")){
+						controle = 0;
+					}
+					System.out.println(palitos.receberResultadoRodada());
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
