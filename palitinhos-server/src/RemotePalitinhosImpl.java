@@ -1,11 +1,10 @@
-package br.ufrn.imd.sid;
 
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import br.ufrn.imd.controller.GameRun;
 import br.ufrn.imd.sid.model.Jogador;
 import br.ufrn.imd.sid.model.Jogo;
 
@@ -17,12 +16,14 @@ public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemoteP
 	private static final long serialVersionUID = 1L;
 	private GameRun game;
 	private int quantosResultados = 0;
-	
- 	public static void main(String[] args) {
+
+	public static void main(String[] args) {
 		try {
-			Registry r = LocateRegistry.getRegistry();
+			System.setSecurityManager(new RMISecurityManager());
+
+			Registry r = LocateRegistry.createRegistry(1099);
 			r.bind("palitinhos", new RemotePalitinhosImpl());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -35,7 +36,7 @@ public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemoteP
 		this.game = new GameRun(jogo);
 		System.out.println("Servidor: Servidor Rodando e Jogo pronto");
 	}
-	
+
 	public String getEstado() throws RemoteException {
 		return game.getEstado();
 	}
@@ -49,42 +50,40 @@ public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemoteP
 		Jogador jogador = game.acharJogador(nome, nick);
 		jogador.setOpcao(opcao);
 		game.setEstado();
-		
-		if(game.getEstado().equals("ESPERANDO_JOGADORES")){
+
+		if (game.getEstado().equals("ESPERANDO_JOGADORES")) {
 			return "ESPERANDO_JOGADORES";
-		}
-		else{
+		} else {
 			return "ESPERANDO_LANCES";
 		}
 	}
 
 	public String darLance(String nome, String nick, int opcao, int mao, int chute) throws RemoteException {
-		
-		if(quantosResultados == game.getJogo().getJogadores().size()){
+
+		if (quantosResultados == game.getJogo().getJogadores().size()) {
 			quantosResultados = 0;
 			game.resetarChutes();
 			game.resetarTotalPalitosRodada();
 			game.resetarMaos();
 		}
-		
-		if(opcao == 2){
+
+		if (opcao == 2) {
 			Jogador jogador = game.acharJogador(nome, nick);
 			jogador.setOpcao(2);
 			jogador.setChute(chute);
 			jogador.setPalitosMao(mao);
 		}
 		game.setEstado();
-		
-		if(game.getEstado().equals("FIM_RODADA")){
+
+		if (game.getEstado().equals("FIM_RODADA")) {
 			game.somarTotalPalitosRodada();
 			game.addRodada();
-			
-			for(Jogador j: game.procurarGanhadorRodada()){
+
+			for (Jogador j : game.procurarGanhadorRodada()) {
 				j.setTotalPalitos(j.getTotalPalitos() - 1);
 			}
 			return "FIM_RODADA";
-		}
-		else{
+		} else {
 			return game.getEstado();
 		}
 	}
@@ -101,6 +100,5 @@ public class RemotePalitinhosImpl extends UnicastRemoteObject implements RemoteP
 	public int quantosJogadores() throws RemoteException {
 		return game.getJogo().getJogadores().size();
 	}
-	
-	
+
 }
